@@ -24,20 +24,20 @@
     },
     {
       "id": 2,
-      "name": "Advanced TypeScript",
+      "name": " JavaScript",
       "startDate": "2024-04-01",
       "endDate": "2024-06-10",
       "subcourses": [
         {
           "id": 201,
-          "name": "Decorators",
+          "name": "DOM",
           "startDate": "2024-04-01",
           "endDate": "2024-04-15",
           "courseId": 2
         },
         {
           "id": 202,
-          "name": "Generics",
+          "name": "BOM",
           "startDate": "2024-04-16",
           "endDate": "2024-05-01",
           "courseId": 2

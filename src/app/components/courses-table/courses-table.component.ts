@@ -4,17 +4,23 @@ import { CourseService } from '../../services/course.service';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
+import { SubcourseRowDetailsComponent } from '../subcourse-row-details/subcourse-row-details.component';
 
 @Component({
   selector: 'app-courses-table',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    SubcourseRowDetailsComponent  // Add this import
+  ],
   templateUrl: './courses-table.component.html',
   styleUrls: ['./courses-table.component.css']
 })
 export class CoursesTableComponent {
   courses: Course[] = [];
-  expandedRows: { [key: number]: boolean } = {};
+  expandedRows: number[] = [];
 
   constructor(private courseService: CourseService) {}
 
@@ -30,7 +36,16 @@ export class CoursesTableComponent {
     });
   }
 
-  toggleRow(course: Course) {
-    this.expandedRows[course.id] = !this.expandedRows[course.id];
+  toggleSubcourses(courseId: number) {
+    const index = this.expandedRows.indexOf(courseId);
+    if (index >= 0) {
+      this.expandedRows.splice(index, 1);
+    } else {
+      this.expandedRows.push(courseId);
+    }
+  }
+
+  isExpanded(courseId: number): boolean {
+    return this.expandedRows.includes(courseId);
   }
 }

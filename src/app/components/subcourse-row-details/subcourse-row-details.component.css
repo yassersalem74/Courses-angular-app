@@ -1,0 +1,16 @@
+.bg-sub-color {
+  background-color: #bfc0c1;
+  color: black;
+}
+
+
+.subcourse-row td {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+
+.bg-sub-header-color{
+  background-color: #9a9b9d;
+  color: black;
+}

@@ -1,0 +1,10 @@
+.table-header{
+  border-bottom:3px solid #20a373;
+  border-top:3px solid #20a373;
+}
+
+.add-button{
+  display: flex;
+  justify-content: end;
+  padding: 8px;
+}

@@ -1,28 +1,51 @@
+<div class="add-button">
+  <button pButton
+    class="p-button-rounded p-button-text"
+    label="Add Course"></button>
+</div>
 <p-table [value]="courses" dataKey="id">
-  <ng-template pTemplate="header">
+  <ng-template pTemplate="header" class="table-header">
     <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Start Date</th>
-      <th>End Date</th>
-      <th>Actions</th>
-      <th>Expand</th>
+      <th class="table-header">ID</th>
+      <th class="table-header">Name</th>
+      <th class="table-header">Start Date</th>
+      <th class="table-header">End Date</th>
+      <th class="table-header">Actions</th>
+      <th class="table-header">Subcourses</th>
     </tr>
   </ng-template>
+
   <ng-template pTemplate="body" let-course>
+
     <tr>
       <td>{{course.id}}</td>
       <td>{{course.name}}</td>
-      <td>{{course.startDate }}</td>
-      <td>{{course.endDate }}</td>
+      <td>{{course.startDate}}</td>
+      <td>{{course.endDate}}</td>
       <td>
-        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text">add</button>
-        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text">edit</button>
-        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text">delete</button>
+
+        <button pButton
+          class="p-button-rounded p-button-text"
+          label="Edit"></button>
+        <button pButton
+          class="p-button-rounded p-button-text"
+          label="Delete"></button>
       </td>
-      <td><button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text">+</button></td>
+      <td>
+        <button pButton
+          (click)="toggleSubcourses(course.id)"
+          class="p-button-rounded p-button-text"
+          [label]="isExpanded(course.id) ? 'Hide' : 'Show'"></button>
+      </td>
     </tr>
 
-
+    @if (isExpanded(course.id)) {
+    <tr>
+      <td colspan="6" class="p-0">
+        <app-subcourse-row-details
+          [subcourses]="course.subcourses"></app-subcourse-row-details>
+      </td>
+    </tr>
+    }
   </ng-template>
 </p-table>

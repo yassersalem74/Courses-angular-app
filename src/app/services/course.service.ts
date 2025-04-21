@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { Course } from '../models/course.model';
+import { Course   } from '../models/course.model';
+import { Subcourse } from './../models/subcourse.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,4 +17,12 @@ export class CourseService {
     );
   }
 
+  getSubcourses(courseId: number): Observable<Subcourse[]> {
+    return this.getCourses().pipe(
+      map(courses => {
+        const course = courses.find(c => c.id === courseId);
+        return course?.subcourses || [];
+      })
+    );
+  }
 }

@@ -1,10 +1,19 @@
 <p-table [value]="subcourses" styleClass="p-datatable-gridlines">
+  <ng-template pTemplate="header">
+    <tr class="bg-sub-header-color">
+      <th class="bg-sub-header-color">ID</th>
+      <th class="bg-sub-header-color" >Name</th>
+      <th class="bg-sub-header-color">Start Date</th>
+      <th class="bg-sub-header-color">End Date</th>
+      <th class="bg-sub-header-color">Actions</th>
+    </tr>
+  </ng-template>
   <ng-template pTemplate="body" let-subcourse>
-    <tr class="subcourse-row">
+    <tr class="subcourse-row bg-sub-color">
       <td>{{subcourse.id}}</td>
       <td>{{subcourse.name}}</td>
-      <td>{{subcourse.startDate }}</td>
-      <td>{{subcourse.endDate }}</td>
+      <td>{{subcourse.startDate}}</td>
+      <td>{{subcourse.endDate}}</td>
       <td>
         <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
       </td>
