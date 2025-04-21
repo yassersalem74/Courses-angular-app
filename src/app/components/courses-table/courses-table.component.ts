@@ -3,28 +3,38 @@ import { Course } from '../../models/course.model';
 import { CourseService } from '../../services/course.service';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
 import { SubcourseRowDetailsComponent } from '../subcourse-row-details/subcourse-row-details.component';
+import { DialogService } from 'primeng/dynamicdialog'; // New import
+import { AddCourseComponent } from './../../Forms/add-course/add-course.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-courses-table',
   standalone: true,
   imports: [
-    CommonModule,
     TableModule,
     ButtonModule,
-    SubcourseRowDetailsComponent  // Add this import
+    SubcourseRowDetailsComponent,
+    CommonModule,
   ],
   templateUrl: './courses-table.component.html',
-  styleUrls: ['./courses-table.component.css']
+  styleUrls: ['./courses-table.component.css'],
+  providers: [DialogService]
 })
 export class CoursesTableComponent {
   courses: Course[] = [];
   expandedRows: number[] = [];
 
-  constructor(private courseService: CourseService) {}
+  constructor(
+    private courseService: CourseService,
+    private dialogService: DialogService
+  ) {}
 
   ngOnInit() {
+    this.loadCourses();
+  }
+
+  loadCourses() {
     this.courseService.getCourses().subscribe({
       next: (data) => {
         this.courses = data;
@@ -35,6 +45,26 @@ export class CoursesTableComponent {
       }
     });
   }
+
+
+  openAddCourseDialog() {
+    const ref = this.dialogService.open(AddCourseComponent, {
+      header: 'Add New Course',
+      width: '370px',
+      contentStyle: { 'max-height': '500px', overflow: 'auto' },
+      dismissableMask: true
+    });
+
+    ref.onClose.subscribe((newCourse: Course) => {
+      if (newCourse) {
+        this.courseService.addCourse(newCourse).subscribe({
+          next: () => this.loadCourses(),
+          error: (err) => console.error('Error adding course:', err)
+        });
+      }
+    });
+  }
+
 
   toggleSubcourses(courseId: number) {
     const index = this.expandedRows.indexOf(courseId);
@@ -48,4 +78,6 @@ export class CoursesTableComponent {
   isExpanded(courseId: number): boolean {
     return this.expandedRows.includes(courseId);
   }
+
+
 }

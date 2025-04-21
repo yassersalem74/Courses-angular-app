@@ -1,7 +1,10 @@
 <div class="add-button">
-  <button pButton
-    class="p-button-rounded p-button-text"
-    label="Add Course"></button>
+  <div class="add-button">
+    <button pButton
+      class="p-button-rounded p-button-text"
+      label="Add Course"
+      (click)="openAddCourseDialog()"></button>
+  </div>
 </div>
 <p-table [value]="courses" dataKey="id">
   <ng-template pTemplate="header" class="table-header">

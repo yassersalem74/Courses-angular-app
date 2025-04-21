@@ -1,0 +1,20 @@
+.p-field {
+  margin-bottom: 1.5rem;
+}
+
+.p-error {
+  color: #f44336;
+  font-size: 0.75rem;
+}
+
+input.ng-invalid.ng-touched,
+p-calendar.ng-invalid.ng-touched .p-inputtext {
+  border-color: #f44336 !important;
+}
+
+
+.input-flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
