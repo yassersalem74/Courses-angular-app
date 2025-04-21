@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+// import { RouterOutlet } from '@angular/router';
+import {  ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { CoursesTableComponent } from "./components/courses-table/courses-table.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [ ButtonModule, TableModule, CoursesTableComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

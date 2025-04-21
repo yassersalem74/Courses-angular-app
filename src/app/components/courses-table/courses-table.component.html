@@ -1,0 +1,28 @@
+<p-table [value]="courses" dataKey="id">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Actions</th>
+      <th>Expand</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-course>
+    <tr>
+      <td>{{course.id}}</td>
+      <td>{{course.name}}</td>
+      <td>{{course.startDate }}</td>
+      <td>{{course.endDate }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text">add</button>
+        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text">edit</button>
+        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text">delete</button>
+      </td>
+      <td><button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text">+</button></td>
+    </tr>
+
+
+  </ng-template>
+</p-table>

@@ -1,0 +1,48 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "name": "Angular Fundamentals",
+      "startDate": "2024-01-10",
+      "endDate": "2024-03-15",
+      "subcourses": [
+        {
+          "id": 101,
+          "name": "Components",
+          "startDate": "2024-01-10",
+          "endDate": "2024-01-24",
+          "courseId": 1
+        },
+        {
+          "id": 102,
+          "name": "Directives",
+          "startDate": "2024-01-25",
+          "endDate": "2024-02-08",
+          "courseId": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Advanced TypeScript",
+      "startDate": "2024-04-01",
+      "endDate": "2024-06-10",
+      "subcourses": [
+        {
+          "id": 201,
+          "name": "Decorators",
+          "startDate": "2024-04-01",
+          "endDate": "2024-04-15",
+          "courseId": 2
+        },
+        {
+          "id": 202,
+          "name": "Generics",
+          "startDate": "2024-04-16",
+          "endDate": "2024-05-01",
+          "courseId": 2
+        }
+      ]
+    }
+  ]
+}

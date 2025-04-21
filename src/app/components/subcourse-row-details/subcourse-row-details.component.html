@@ -1,0 +1,13 @@
+<p-table [value]="subcourses" styleClass="p-datatable-gridlines">
+  <ng-template pTemplate="body" let-subcourse>
+    <tr class="subcourse-row">
+      <td>{{subcourse.id}}</td>
+      <td>{{subcourse.name}}</td>
+      <td>{{subcourse.startDate }}</td>
+      <td>{{subcourse.endDate }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
