@@ -30,9 +30,10 @@
           class="p-button-rounded p-button-text"
           label="Edit"
           (click)="openEditCourseDialog(course)"></button>
-        <button pButton
-          class="p-button-rounded p-button-text"
-          label="Delete"></button>
+          <button pButton
+          class="p-button-rounded p-button-text delete-button"
+          label="Delete"
+          (click)="deleteCourse(course.id)"></button>
       </td>
       <td>
         <button pButton

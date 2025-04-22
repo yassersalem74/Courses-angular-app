@@ -103,5 +103,20 @@ openEditCourseDialog(course: Course) {
     return this.expandedRows.includes(courseId);
   }
 
+  deleteCourse(courseId: number) {
+    if (confirm('Are you sure you want to delete this course?')) {
+      this.courseService.deleteCourse(courseId).subscribe({
+        next: () => {
+          if (this.courses.length > 1) {
+            this.loadCourses();
+          } else {
+            this.courses = this.courses.filter(c => c.id !== courseId);
+          }
+          console.log('Course deleted successfully');
+        },
+        error: (err) => console.error('Error deleting course:', err)
+      });
+    }
+  }
 
 }

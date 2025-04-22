@@ -90,4 +90,10 @@ export class CourseService {
 
     return `${year}-${month}-${day}`;
   }
+
+  deleteCourse(courseId: number): Observable<void> {
+    this.coursesData = this.coursesData.filter(course => course.id !== courseId);
+    console.log('Course deleted:', courseId);
+    return of(undefined);
+  }
 }

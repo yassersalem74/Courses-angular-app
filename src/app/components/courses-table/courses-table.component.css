@@ -11,3 +11,10 @@
 }
 
 
+.delete-button{
+  color: red;
+}
+
+.delete-button:hover{
+  color: rgb(208, 5, 5);
+}
