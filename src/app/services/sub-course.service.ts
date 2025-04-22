@@ -13,11 +13,15 @@ export class SubCourseService {
   addSubCourse(courseId: number, subCourse: Omit<Subcourse, 'id' | 'courseId'>): Observable<Subcourse> {
     return this.courseService.getCourses().pipe(
       map((courses: Course[]) => {
-        const course = this.validateAndPrepareCourse(courses, courseId, subCourse);
+        const course = courses.find(c => c.id === courseId);
+        if (!course) {
+          throw new Error('Parent course not found');
+        }
+
         const updatedCourse = this.updateCourseWithSubcourse(course, subCourse);
         const newSubCourseId = this.generateNewId(course.subcourses);
-
         const newSubCourse = updatedCourse.subcourses.find(sc => sc.id === newSubCourseId);
+
         if (!newSubCourse) {
           throw new Error('Failed to create subcourse');
         }
