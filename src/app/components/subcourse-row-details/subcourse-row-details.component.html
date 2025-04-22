@@ -2,7 +2,7 @@
   <ng-template pTemplate="header">
     <tr class="bg-sub-header-color">
       <th class="bg-sub-header-color">ID</th>
-      <th class="bg-sub-header-color" >Name</th>
+      <th class="bg-sub-header-color">Name</th>
       <th class="bg-sub-header-color">Start Date</th>
       <th class="bg-sub-header-color">End Date</th>
       <th class="bg-sub-header-color">Actions</th>
@@ -12,10 +12,12 @@
     <tr class="subcourse-row bg-sub-color">
       <td>{{subcourse.id}}</td>
       <td>{{subcourse.name}}</td>
-      <td>{{subcourse.startDate}}</td>
-      <td>{{subcourse.endDate}}</td>
+      <td>{{subcourse.startDate | date:'yyyy-MM-dd'}}</td>
+      <td>{{subcourse.endDate | date:'yyyy-MM-dd'}}</td>
       <td>
-        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text"></button>
+        <button pButton class="p-button-rounded p-button-text edit-button"
+                (click)="openEditDialog(subcourse)">edit</button>
+        <button pButton class="p-button-rounded p-button-text delete-button">delete</button>
       </td>
     </tr>
   </ng-template>

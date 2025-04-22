@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, map, catchError, throwError } from 'rxjs';
+import { Observable, switchMap, map, catchError, throwError } from 'rxjs';
 import { Course } from '../models/course.model';
 import { Subcourse } from '../models/subcourse.model';
 import { CourseService } from './course.service';
@@ -17,7 +17,6 @@ export class SubCourseService {
         const updatedCourse = this.updateCourseWithSubcourse(course, subCourse);
         const newSubCourseId = this.generateNewId(course.subcourses);
 
-        // Find the newly added subcourse (guaranteed to exist)
         const newSubCourse = updatedCourse.subcourses.find(sc => sc.id === newSubCourseId);
         if (!newSubCourse) {
           throw new Error('Failed to create subcourse');
@@ -33,25 +32,55 @@ export class SubCourseService {
     );
   }
 
-  validateSubCourseDates(course: Course, subCourse: Omit<Subcourse, 'id' | 'courseId'>): void {
+  updateSubCourse(courseId: number, subCourse: Subcourse): Observable<Subcourse> {
+    return this.courseService.getCourses().pipe(
+      switchMap((courses: Course[]) => {
+        const course = this.validateAndPrepareCourse(courses, courseId, subCourse);
+
+        const updatedCourse = {
+          ...course,
+          subcourses: course.subcourses?.map(sc =>
+            sc.id === subCourse.id ? subCourse : sc
+          ) || []
+        };
+
+        return this.courseService.editCourse(updatedCourse).pipe(
+          map(() => subCourse)
+        );
+      }),
+      catchError(error => {
+        console.error('Error updating subcourse:', error);
+        return throwError(() => new Error(this.getUserFriendlyError(error)));
+      })
+    );
+  }
+
+  private validateAndPrepareCourse(courses: Course[], courseId: number, subCourse: Omit<Subcourse, 'id' | 'courseId'> | Subcourse): Course {
+    const course = courses.find(c => c.id === courseId);
+    if (!course) {
+      throw new Error('Parent course not found');
+    }
+
+    this.validateSubCourseDates(course, subCourse);
+    return course;
+  }
+
+  validateSubCourseDates(course: Course, subCourse: Omit<Subcourse, 'id' | 'courseId'> | Subcourse): void {
     const errors: string[] = [];
     const courseStart = new Date(course.startDate);
     const courseEnd = new Date(course.endDate);
     const subStart = new Date(subCourse.startDate);
     const subEnd = new Date(subCourse.endDate);
 
-    // Date order validation
     if (subEnd <= subStart) {
       errors.push('End date must be after start date');
     }
 
-    // Parent course range validation
     if (subStart < courseStart || subEnd > courseEnd) {
       errors.push('Dates must be within parent course range');
     }
 
-    // Overlap validation
-    if (course.subcourses?.some(existing => this.datesOverlap(
+    if (course.subcourses?.some(existing => existing.id !== (subCourse as Subcourse).id && this.datesOverlap(
       { start: subStart, end: subEnd },
       { start: new Date(existing.startDate), end: new Date(existing.endDate) }
     ))) {
@@ -61,16 +90,6 @@ export class SubCourseService {
     if (errors.length > 0) {
       throw new Error(errors.join('\n'));
     }
-  }
-
-  private validateAndPrepareCourse(courses: Course[], courseId: number, subCourse: Omit<Subcourse, 'id' | 'courseId'>): Course {
-    const course = courses.find(c => c.id === courseId);
-    if (!course) {
-      throw new Error('Parent course not found');
-    }
-
-    this.validateSubCourseDates(course, subCourse);
-    return course;
   }
 
   private updateCourseWithSubcourse(course: Course, subCourse: Omit<Subcourse, 'id' | 'courseId'>): Course {
@@ -100,13 +119,13 @@ export class SubCourseService {
 
   private formatDateWithoutTimezone(date: string | Date): string {
     if (typeof date === 'string') return date;
-    return date.toISOString().split('T')[0]; // YYYY-MM-DD format
+    return date.toISOString().split('T')[0];
   }
 
   private getUserFriendlyError(error: any): string {
     if (error instanceof Error) {
       return error.message;
     }
-    return 'An unknown error occurred while adding the subcourse';
+    return 'An unknown error occurred while processing the subcourse';
   }
 }

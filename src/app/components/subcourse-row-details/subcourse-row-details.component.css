@@ -14,3 +14,26 @@
   background-color: #9a9b9d;
   color: black;
 }
+
+.edit-button{
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+}
+.edit-button:hover{
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+
+}
+
+
+.delete-button{
+color: red;
+cursor: pointer;
+}
+
+.delete-button:hover{
+  color: rgb(220, 3, 3);
+  cursor: pointer;
+  }
