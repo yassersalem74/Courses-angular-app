@@ -28,7 +28,7 @@ export class SubcourseRowDetailsComponent {
     const ref = this.dialogService.open(EditSubCourseComponent, {
       header: 'Edit Subcourse',
       width: '370px',
-      contentStyle: { 'max-height': '500px', overflow: 'auto' },
+      contentStyle: { 'height': '400px', overflow: 'auto' },
       dismissableMask: true,
       data: {
         courseId: this.parentCourseId,

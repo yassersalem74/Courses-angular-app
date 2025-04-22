@@ -14,14 +14,14 @@ import { AddSubCourseComponent } from '../../Forms/add-sub-course/add-sub-course
   selector: 'app-courses-table',
   standalone: true,
   imports: [
-  TableModule,
+    TableModule,
     ButtonModule,
     SubcourseRowDetailsComponent,
     CommonModule,
   ],
   templateUrl: './courses-table.component.html',
   styleUrls: ['./courses-table.component.css'],
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class CoursesTableComponent {
   courses: Course[] = [];
@@ -44,52 +44,49 @@ export class CoursesTableComponent {
       },
       error: (err) => {
         console.error('Error loading courses:', err);
-      }
+      },
     });
   }
-
 
   openAddCourseDialog() {
     const ref = this.dialogService.open(AddCourseComponent, {
       header: 'Add New Course',
       width: '370px',
-      contentStyle: { 'max-height': '500px', overflow: 'auto' },
-      dismissableMask: true
+      contentStyle: { height: '400px', overflow: 'auto' },
+      dismissableMask: true,
     });
 
     ref.onClose.subscribe((newCourse: Course) => {
       if (newCourse) {
         this.courseService.addCourse(newCourse).subscribe({
           next: () => this.loadCourses(),
-          error: (err) => console.error('Error adding course:', err)
+          error: (err) => console.error('Error adding course:', err),
         });
       }
     });
   }
 
+  openEditCourseDialog(course: Course) {
+    const ref = this.dialogService.open(EditCourseComponent, {
+      header: 'Edit Course',
+      width: '370px',
+      contentStyle: { height: '400px', overflow: 'auto' },
+      dismissableMask: true,
+      data: { course },
+    });
 
-openEditCourseDialog(course: Course) {
-  const ref = this.dialogService.open(EditCourseComponent, {
-    header: 'Edit Course',
-    width: '370px',
-    contentStyle: { 'max-height': '500px', overflow: 'auto' },
-    dismissableMask: true,
-    data: { course }
-  });
-
-  ref.onClose.subscribe((updatedCourse: Course) => {
-    if (updatedCourse) {
-
-      this.courseService.editCourse(updatedCourse).subscribe({
-        next: () => {
-          this.loadCourses();
-          console.log('Course updated successfully');
-        },
-        error: (err) => console.error('Error updating course:', err)
-      });
-    }
-  });
-}
+    ref.onClose.subscribe((updatedCourse: Course) => {
+      if (updatedCourse) {
+        this.courseService.editCourse(updatedCourse).subscribe({
+          next: () => {
+            this.loadCourses();
+            console.log('Course updated successfully');
+          },
+          error: (err) => console.error('Error updating course:', err),
+        });
+      }
+    });
+  }
 
   toggleSubcourses(courseId: number) {
     const index = this.expandedRows.indexOf(courseId);
@@ -111,37 +108,33 @@ openEditCourseDialog(course: Course) {
           if (this.courses.length > 1) {
             this.loadCourses();
           } else {
-            this.courses = this.courses.filter(c => c.id !== courseId);
+            this.courses = this.courses.filter((c) => c.id !== courseId);
           }
           console.log('Course deleted successfully');
         },
-        error: (err) => console.error('Error deleting course:', err)
+        error: (err) => console.error('Error deleting course:', err),
       });
     }
   }
 
+  openAddSubCourseDialog(courseId: number) {
+    const parentCourse = this.courses.find((c) => c.id === courseId);
 
-// In CoursesTableComponent
-// In your CoursesTableComponent
-openAddSubCourseDialog(courseId: number) {
-  // First get the parent course data
-  const parentCourse = this.courses.find(c => c.id === courseId);
+    const ref = this.dialogService.open(AddSubCourseComponent, {
+      header: 'Add New Subcourse',
+      width: '400px',
+      contentStyle: { height: '400px', overflow: 'auto' },
+      dismissableMask: true,
+      data: {
+        courseId,
+        parentCourse,
+      },
+    });
 
-  const ref = this.dialogService.open(AddSubCourseComponent, {
-    header: 'Add New Subcourse',
-    width: '400px',
-    contentStyle: { 'max-height': '500px', overflow: 'auto' }, // Add this
-    dismissableMask: true, // Add this
-    data: {
-      courseId,
-      parentCourse // Pass the actual course data
-    }
-  });
-
-  ref.onClose.subscribe((newSubCourse: any) => {
-    if (newSubCourse) {
-      this.loadCourses(); // Just reload all courses instead of manual manipulation
-    }
-  });
-}
+    ref.onClose.subscribe((newSubCourse: any) => {
+      if (newSubCourse) {
+        this.loadCourses();
+      }
+    });
+  }
 }
