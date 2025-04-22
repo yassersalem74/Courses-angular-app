@@ -1,59 +1,79 @@
-# Courses
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
+# Course Management Application
 
-## Development server
+This is an **Angular-based** web application designed to manage **courses** and **subcourses**. The application uses **PrimeNG** components and **Angular dialog services** to provide an interactive user experience for adding and editing course details.
 
-To start a local development server, run:
+## Features
+
+- **Course Management**: Allows users to create, edit, and delete courses.
+- **Subcourse Management**: Enables users to create and manage subcourses under each course.
+- **PrimeNG Integration**: Utilizes PrimeNG components such as calendars, dialogs, and form controls for a rich UI.
+- **Dynamic Dialog Forms**: Utilizes Angular dialog services to manage dynamic forms for adding or editing courses and subcourses.
+
+## Technologies Used
+
+- **Angular**: A platform and framework for building client-side applications with TypeScript.
+- **PrimeNG**: A set of rich UI components for Angular.
+
+
+
+### Installing Dependencies
+
+Clone the repository to your local machine:
+
+```bash
+git clone https://github.com/your-username/course-management-app.git
+```
+
+Navigate to the project directory and install the dependencies:
+
+```bash
+cd course-management-app
+npm install
+```
+
+### Running the Application
+
+To start the development server, run:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+This will compile the application and make it available at `http://localhost:4200/`.
 
-## Code scaffolding
+## Usage
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. **Add a Course**: Click the "Add Course" button to open a dialog form where you can enter course details.
+2. **Add a Subcourse**: After selecting a course, click the "Add Subcourse" button to open a dynamic form for adding subcourse details.
+3. **Edit/Delete**: Each course and subcourse has options to edit or delete it.
 
-```bash
-ng generate component component-name
-```
+## Development
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Folder Structure
 
-```bash
-ng generate --help
-```
+The folder structure is organized as follows:
 
-## Building
+- **`src/app/components`**: Contains reusable components.
+- **`src/app/services`**: Contains services for managing courses and subcourses.
+- **`src/app/models`**: Contains TypeScript models for Course and Subcourse.
 
-To build the project run:
+### Components and Dialogs
 
-```bash
-ng build
-```
+The application utilizes **Angular dialogs** for dynamic forms. The course and subcourse dialogs are configured to be opened based on user actions, allowing for smooth data entry and editing.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### PrimeNG Integration
 
-## Running unit tests
+PrimeNG components such as `p-calendar`, `p-dialog`, and `p-inputText` are used to create an intuitive interface. These components are configured in the Angular module and are styled using the default PrimeNG themes.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Contributing
 
-```bash
-ng test
-```
+Feel free to fork the repository and submit pull requests. When contributing, please ensure that your code follows the **Angular style guide** and that **tests** are written for new features.
 
-## Running end-to-end tests
+### Steps for Contributing:
 
-For end-to-end (e2e) testing, run:
+1. **Fork** the repository.
+2. **Create a new branch** for your feature or bug fix.
+3. **Write unit tests** if applicable.
+4. **Submit a pull request** with a detailed description of your changes.
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
