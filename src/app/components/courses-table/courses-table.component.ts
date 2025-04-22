@@ -53,7 +53,7 @@ export class CoursesTableComponent {
     const ref = this.dialogService.open(AddCourseComponent, {
       header: 'Add New Course',
       width: '370px',
-      contentStyle: { 'max-height': '500px', overflow: 'auto' },
+      contentStyle: { 'height': '400px', overflow: 'auto' },
       dismissableMask: true
     });
 
@@ -72,7 +72,7 @@ openEditCourseDialog(course: Course) {
   const ref = this.dialogService.open(EditCourseComponent, {
     header: 'Edit Course',
     width: '370px',
-    contentStyle: { 'max-height': '500px', overflow: 'auto' },
+    contentStyle: { 'height': '400px', overflow: 'auto' },
     dismissableMask: true,
     data: { course }
   });
@@ -121,26 +121,25 @@ openEditCourseDialog(course: Course) {
   }
 
 
-// In CoursesTableComponent
-// In your CoursesTableComponent
+
 openAddSubCourseDialog(courseId: number) {
-  // First get the parent course data
+
   const parentCourse = this.courses.find(c => c.id === courseId);
 
   const ref = this.dialogService.open(AddSubCourseComponent, {
     header: 'Add New Subcourse',
     width: '400px',
-    contentStyle: { 'max-height': '500px', overflow: 'auto' }, // Add this
-    dismissableMask: true, // Add this
+    contentStyle: { 'height': '400px', overflow: 'auto' },
+    dismissableMask: true,
     data: {
       courseId,
-      parentCourse // Pass the actual course data
+      parentCourse
     }
   });
 
   ref.onClose.subscribe((newSubCourse: any) => {
     if (newSubCourse) {
-      this.loadCourses(); // Just reload all courses instead of manual manipulation
+      this.loadCourses();
     }
   });
 }
