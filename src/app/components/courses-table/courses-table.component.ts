@@ -8,6 +8,7 @@ import { DialogService } from 'primeng/dynamicdialog'; // New import
 import { AddCourseComponent } from './../../Forms/add-course/add-course.component';
 import { EditCourseComponent } from './../../Forms/edit-course/edit-course.component';
 import { CommonModule } from '@angular/common';
+import { AddSubCourseComponent } from '../../Forms/add-sub-course/add-sub-course.component';
 
 @Component({
   selector: 'app-courses-table',
@@ -119,4 +120,28 @@ openEditCourseDialog(course: Course) {
     }
   }
 
+
+// In CoursesTableComponent
+// In your CoursesTableComponent
+openAddSubCourseDialog(courseId: number) {
+  // First get the parent course data
+  const parentCourse = this.courses.find(c => c.id === courseId);
+
+  const ref = this.dialogService.open(AddSubCourseComponent, {
+    header: 'Add New Subcourse',
+    width: '400px',
+    contentStyle: { 'max-height': '500px', overflow: 'auto' }, // Add this
+    dismissableMask: true, // Add this
+    data: {
+      courseId,
+      parentCourse // Pass the actual course data
+    }
+  });
+
+  ref.onClose.subscribe((newSubCourse: any) => {
+    if (newSubCourse) {
+      this.loadCourses(); // Just reload all courses instead of manual manipulation
+    }
+  });
+}
 }

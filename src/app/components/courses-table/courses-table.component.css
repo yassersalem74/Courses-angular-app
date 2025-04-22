@@ -18,3 +18,11 @@
 .delete-button:hover{
   color: rgb(208, 5, 5);
 }
+
+.add-sub-button{
+  color: lightskyblue;
+}
+
+.add-sub-button:hover{
+  color: rgb(68, 122, 156);
+}

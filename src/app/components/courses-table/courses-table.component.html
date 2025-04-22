@@ -34,6 +34,10 @@
           class="p-button-rounded p-button-text delete-button"
           label="Delete"
           (click)="deleteCourse(course.id)"></button>
+          <button pButton
+          class="p-button-rounded p-button-text add-sub-button"
+          label="Add Subcourse"
+          (click)="openAddSubCourseDialog(course.id)"></button>
       </td>
       <td>
         <button pButton

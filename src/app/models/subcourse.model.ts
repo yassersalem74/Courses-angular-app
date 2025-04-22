@@ -1,7 +1,7 @@
 export interface Subcourse {
   id: number;
   name: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   courseId: number;
 }
