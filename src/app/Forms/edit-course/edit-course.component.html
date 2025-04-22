@@ -1,0 +1,43 @@
+
+<div class="p-fluid">
+  <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+    <div class="p-field">
+      <div class="input-flex">
+        <label for="name">Course Name</label>
+        <input pInputText id="name" formControlName="name" />
+      </div>
+      <small *ngIf="submitted && courseForm.get('name')?.errors?.['required']"
+        class="p-error">Name is required</small>
+    </div>
+
+    <div class="p-field">
+      <div class="input-flex">
+        <label for="startDate">Start Date</label>
+        <p-calendar id="startDate" formControlName="startDate"
+          [showIcon]="true"></p-calendar>
+      </div>
+      <small
+        *ngIf="submitted && courseForm.get('startDate')?.errors?.['required']"
+        class="p-error">Start date is required</small>
+    </div>
+
+    <div class="p-field">
+      <div class="input-flex">
+        <label for="endDate">End Date</label>
+        <p-calendar id="endDate" formControlName="endDate"
+          [showIcon]="true"></p-calendar>
+      </div>
+      <small
+        *ngIf="submitted && courseForm.get('endDate')?.errors?.['required']"
+        class="p-error">End date is required</small>
+      <small *ngIf="submitted && courseForm.errors?.['dateError']"
+        class="p-error">End date must be after start date</small>
+    </div>
+
+    <div class="p-d-flex p-jc-end p-mt-3">
+      <button pButton type="button" label="Cancel" class="p-button-text"
+        (click)="ref.close()"></button>
+      <button pButton type="submit" label="Save" class="p-ml-2"></button>
+    </div>
+  </form>
+</div>

@@ -6,13 +6,14 @@ import { ButtonModule } from 'primeng/button';
 import { SubcourseRowDetailsComponent } from '../subcourse-row-details/subcourse-row-details.component';
 import { DialogService } from 'primeng/dynamicdialog'; // New import
 import { AddCourseComponent } from './../../Forms/add-course/add-course.component';
+import { EditCourseComponent } from './../../Forms/edit-course/edit-course.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-courses-table',
   standalone: true,
   imports: [
-    TableModule,
+  TableModule,
     ButtonModule,
     SubcourseRowDetailsComponent,
     CommonModule,
@@ -65,6 +66,29 @@ export class CoursesTableComponent {
     });
   }
 
+
+openEditCourseDialog(course: Course) {
+  const ref = this.dialogService.open(EditCourseComponent, {
+    header: 'Edit Course',
+    width: '370px',
+    contentStyle: { 'max-height': '500px', overflow: 'auto' },
+    dismissableMask: true,
+    data: { course }
+  });
+
+  ref.onClose.subscribe((updatedCourse: Course) => {
+    if (updatedCourse) {
+
+      this.courseService.editCourse(updatedCourse).subscribe({
+        next: () => {
+          this.loadCourses();
+          console.log('Course updated successfully');
+        },
+        error: (err) => console.error('Error updating course:', err)
+      });
+    }
+  });
+}
 
   toggleSubcourses(courseId: number) {
     const index = this.expandedRows.indexOf(courseId);

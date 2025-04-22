@@ -43,19 +43,11 @@ export class CourseService {
   addCourse(course: Course): Observable<Course> {
     const newId = this.generateNewId();
 
-    const startDate = course.startDate instanceof Date
-      ? course.startDate.toISOString().split('T')[0]
-      : course.startDate;
-
-    const endDate = course.endDate instanceof Date
-      ? course.endDate.toISOString().split('T')[0]
-      : course.endDate;
-
     const newCourse: Course = {
       ...course,
       id: newId,
-      startDate,
-      endDate,
+      startDate: this.formatDateWithoutTimezone(course.startDate),
+      endDate: this.formatDateWithoutTimezone(course.endDate),
       subcourses: course.subcourses || []
     };
 
@@ -72,5 +64,30 @@ export class CourseService {
 
   private formatDate(date: string | Date): string {
     return typeof date === 'string' ? date : date.toISOString().split('T')[0];
+  }
+
+  editCourse(updatedCourse: Course): Observable<Course> {
+    const formattedCourse: Course = {
+      ...updatedCourse,
+      startDate: this.formatDateWithoutTimezone(updatedCourse.startDate),
+      endDate: this.formatDateWithoutTimezone(updatedCourse.endDate)
+    };
+
+    this.coursesData = this.coursesData.map(course =>
+      course.id === formattedCourse.id ? formattedCourse : course
+    );
+
+    console.log('Course updated:', formattedCourse);
+    return of(formattedCourse);
+  }
+
+  private formatDateWithoutTimezone(date: string | Date): string {
+    if (typeof date === 'string') return date;
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 }
