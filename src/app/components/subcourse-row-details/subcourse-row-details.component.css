@@ -1,29 +1,30 @@
 .bg-sub-color {
-  background-color: #000000;
-  color: rgb(255, 255, 255);
+  background-color: #bfc0c1;
+  color: black;
 }
 
 
 .subcourse-row td {
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid #0068cf;
+  border-bottom: 1px solid #dee2e6;
 }
 
 
 .bg-sub-header-color{
-  background-color: #8f97a6;
+  background-color: #9a9b9d;
   color: black;
 }
 
 .edit-button{
-  color: lightskyblue;
+  color: black;
   cursor: pointer;
   font-weight: bold;
 }
 .edit-button:hover{
-  color: rgb(7, 94, 255);
+  color: black;
   cursor: pointer;
   font-weight: bold;
+  /* font-size: 22px;  */
 
 }
 
