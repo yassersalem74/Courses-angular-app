@@ -1,9 +1,9 @@
 <div class="add-button">
   <div class="add-button">
     <button pButton
-      class="p-button-rounded p-button-text"
-      label="Add Course"
-      (click)="openAddCourseDialog()"></button>
+    class="p-button-rounded p-button-text"
+    label="Add Course"
+    (click)="openAddCourseDialog()"></button>
   </div>
 </div>
 <p-table [value]="courses" dataKey="id">
@@ -28,15 +28,15 @@
       <td>
         <button pButton
           class="p-button-rounded p-button-text"
-          label="Edit"
+          icon="pi pi-pencil"
           (click)="openEditCourseDialog(course)"></button>
-          <button pButton
+        <button pButton
           class="p-button-rounded p-button-text delete-button"
-          label="Delete"
+          icon="pi pi-times"
           (click)="deleteCourse(course.id)"></button>
-          <button pButton
+        <button pButton
           class="p-button-rounded p-button-text add-sub-button"
-          label="Add Subcourse"
+          icon="pi pi-plus"
           (click)="openAddSubCourseDialog(course.id)"></button>
       </td>
       <td>

@@ -6,11 +6,12 @@ import { EditSubCourseComponent } from './../../Forms/edit-sub-course/edit-sub-c
 import { Course } from '../../models/course.model';
 import { DatePipe } from '@angular/common';
 import { SubCourseService } from '../../services/sub-course.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-subcourse-row-details',
   standalone: true,
-  imports: [TableModule, DatePipe],
+  imports: [TableModule, DatePipe , ButtonModule],
   templateUrl: './subcourse-row-details.component.html',
   styleUrl: './subcourse-row-details.component.css'
 })
@@ -28,7 +29,7 @@ export class SubcourseRowDetailsComponent {
     const ref = this.dialogService.open(EditSubCourseComponent, {
       header: 'Edit Subcourse',
       width: '370px',
-      contentStyle: { 'max-height': '500px', overflow: 'auto' },
+      contentStyle: { 'height': '400px', overflow: 'auto' },
       dismissableMask: true,
       data: {
         courseId: this.parentCourseId,
