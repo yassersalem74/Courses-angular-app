@@ -5,6 +5,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { EditSubCourseComponent } from './../../Forms/edit-sub-course/edit-sub-course.component';
 import { Course } from '../../models/course.model';
 import { DatePipe } from '@angular/common';
+import { SubCourseService } from '../../services/sub-course.service';
 
 @Component({
   selector: 'app-subcourse-row-details',
@@ -18,7 +19,10 @@ export class SubcourseRowDetailsComponent {
   @Input() parentCourseId!: string;
   @Input() parentCourse!: Course;
 
-  constructor(private dialogService: DialogService) {}
+  constructor(
+    private dialogService: DialogService,
+    private subCourseService: SubCourseService
+  ) {}
 
   openEditDialog(subCourseToEdit: Subcourse) {
     const ref = this.dialogService.open(EditSubCourseComponent, {
@@ -39,6 +43,22 @@ export class SubcourseRowDetailsComponent {
         if (index !== -1) {
           this.subcourses[index] = updatedSubCourse;
         }
+      }
+    });
+  }
+
+  deleteSubCourse(subCourseId: number) {
+    const confirmed = window.confirm('Are you sure you want to delete this subcourse?');
+    if (!confirmed) return;
+
+    const courseId = +this.parentCourseId;
+    this.subCourseService.deleteSubCourse(courseId, subCourseId).subscribe({
+      next: updatedSubcourses => {
+        this.subcourses = updatedSubcourses;
+      },
+      error: err => {
+        console.error('Failed to delete subcourse:', err);
+        alert('Error: ' + err.message);
       }
     });
   }

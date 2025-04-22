@@ -128,4 +128,32 @@ export class SubCourseService {
     }
     return 'An unknown error occurred while processing the subcourse';
   }
+
+
+
+  deleteSubCourse(courseId: number, subCourseId: number): Observable<Subcourse[]> {
+    return this.courseService.getCourses().pipe(
+      switchMap((courses: Course[]) => {
+        const course = courses.find(c => c.id === courseId);
+        if (!course) {
+          throw new Error('Parent course not found');
+        }
+
+        const updatedSubcourses = course.subcourses?.filter(sc => sc.id !== subCourseId) || [];
+        const updatedCourse: Course = {
+          ...course,
+          subcourses: updatedSubcourses
+        };
+
+        return this.courseService.editCourse(updatedCourse).pipe(
+          map(() => updatedSubcourses)
+        );
+      }),
+      catchError(error => {
+        console.error('Error deleting subcourse:', error);
+        return throwError(() => new Error(this.getUserFriendlyError(error)));
+      })
+    );
+  }
+
 }
