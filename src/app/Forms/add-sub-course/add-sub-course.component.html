@@ -4,8 +4,9 @@
       <label for="name">Subcourse Name</label>
       <input pInputText id="name" formControlName="name" />
     </div>
-    <small *ngIf="submitted && subCourseForm.get('name')?.errors?.['required']"
-           class="p-error">Subcourse name is required</small>
+    @if (submitted && subCourseForm.get('name')?.errors?.['required']) {
+      <small class="p-error">Subcourse name is required</small>
+    }
   </div>
 
   <div class="p-field">
@@ -16,11 +17,21 @@
         formControlName="startDate"
         [showIcon]="true"
         dateFormat="yy-mm-dd"
-        [showButtonBar]="true">
+        [minDate]="getMinStartDate()"
+        [maxDate]="getMaxEndDate()"
+        >
       </p-calendar>
+      <!-- // -->
     </div>
-    <small *ngIf="submitted && subCourseForm.get('startDate')?.errors?.['required']"
-           class="p-error">Start date is required</small>
+    @if (submitted && subCourseForm.get('startDate')?.errors?.['required']) {
+      <small class="p-error">Start date is required</small>
+    }
+    @if (submitted && subCourseForm.get('startDate')?.errors?.['minDate']) {
+      <small class="p-error">Start date cannot be before parent course start date</small>
+    }
+    @if (submitted && subCourseForm.get('startDate')?.errors?.['maxDate']) {
+      <small class="p-error">Start date cannot be after parent course end date</small>
+    }
   </div>
 
   <div class="p-field">
@@ -31,23 +42,29 @@
         formControlName="endDate"
         [showIcon]="true"
         dateFormat="yy-mm-dd"
-        [showButtonBar]="true">
+        [minDate]="getMinEndDate()"
+        [maxDate]="getMaxEndDate()"
+        >
       </p-calendar>
     </div>
-    <small *ngIf="submitted && subCourseForm.get('endDate')?.errors?.['required']"
-           class="p-error">End date is required</small>
-  </div>
-
-
-  <div *ngIf="submitted && subCourseForm.errors?.['startBeforeParent']" class="p-error">
-    Start date cannot be before parent course start date ({{ parentCourse.startDate | date }})
-  </div>
-  <div *ngIf="submitted && subCourseForm.errors?.['endAfterParent']" class="p-error">
-    End date cannot be after parent course end date ({{ parentCourse.endDate | date }})
+    @if (submitted && subCourseForm.get('endDate')?.errors?.['required']) {
+      <small class="p-error">End date is required</small>
+    }
+    @if (submitted && subCourseForm.get('endDate')?.errors?.['minDate']) {
+      <small class="p-error">End date must be after start date</small>
+    }
+    @if (submitted && subCourseForm.get('endDate')?.errors?.['maxDate']) {
+      <small class="p-error">End date cannot be after parent course end date</small>
+    }
+    @if (submitted && subCourseForm.errors?.['dateError']) {
+      <small class="p-error">End date must be after start date</small>
+    }
   </div>
 
   <div class="p-d-flex p-jc-end p-mt-3">
-    <button pButton type="button" label="Cancel" class="p-button-text" (click)="ref.close()"></button>
-    <button pButton type="submit" label="Save" class="p-button-raised p-ml-2"></button>
+    <button pButton type="button" label="Cancel"
+      class="p-button-text" (click)="ref.close()"></button>
+    <button pButton type="submit" label="Save"
+      class="p-button-raised p-ml-2"></button>
   </div>
 </form>
