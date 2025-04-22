@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { SubCourseService } from '../../services/sub-course.service';
 import { MessageService } from 'primeng/api';
@@ -41,71 +41,49 @@ export class AddSubCourseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initializeForm();
-  }
 
-  private initializeForm(): void {
+    this.parentCourse.startDate = this.convertToLocalDate(new Date(this.parentCourse.startDate));
+    this.parentCourse.endDate = this.convertToLocalDate(new Date(this.parentCourse.endDate));
+
     this.subCourseForm = this.fb.group({
       name: ['', Validators.required],
-      startDate: [null, [Validators.required, this.validateStartDate.bind(this)]],
-      endDate: [null, [Validators.required, this.validateEndDate.bind(this)]]
-    }, { validator: this.dateRangeValidator.bind(this) });
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required]
+    }, {
+      validators: [this.dateRangeValidator.bind(this)]
+    });
   }
 
-  validateStartDate(control: any): { [key: string]: boolean } | null {
-    const date = new Date(control.value);
-    const parentStart = new Date(this.parentCourse.startDate);
-    const parentEnd = new Date(this.parentCourse.endDate);
-
-    if (date < parentStart) {
-      return { minDate: true };
-    }
-    if (date > parentEnd) {
-      return { maxDate: true };
-    }
-    return null;
+  private convertToLocalDate(date: Date): Date {
+    return new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
   }
 
-  validateEndDate(control: any): { [key: string]: boolean } | null {
-    const date = new Date(control.value);
-    const parentEnd = new Date(this.parentCourse.endDate);
-    const startDate = this.subCourseForm?.get('startDate')?.value;
+  private dateRangeValidator(control: AbstractControl): ValidationErrors | null {
+    const start = control.get('startDate')?.value;
+    const end = control.get('endDate')?.value;
 
-    if (date > parentEnd) {
-      return { maxDate: true };
-    }
-    if (startDate && new Date(date) <= new Date(startDate)) {
-      return { minDate: true };
-    }
-    return null;
-  }
+    if (!start || !end) return null;
 
-  dateRangeValidator(form: FormGroup): { [key: string]: boolean } | null {
-    const startDate = form.get('startDate')?.value;
-    const endDate = form.get('endDate')?.value;
+    const startDate = this.convertToLocalDate(new Date(start));
+    const endDate = this.convertToLocalDate(new Date(end));
+    const parentStart = this.parentCourse.startDate;
+    const parentEnd = this.parentCourse.endDate;
 
-    if (!startDate || !endDate) {
-      return null;
+    const errors: ValidationErrors = {};
+
+    if (startDate < parentStart) {
+      errors['startBeforeParent'] = true;
     }
 
-    if (new Date(endDate) <= new Date(startDate)) {
-      return { dateError: true };
+    if (endDate > parentEnd) {
+      errors['endAfterParent'] = true;
     }
 
-    return null;
-  }
-
-  getMinStartDate(): Date {
-    return new Date(this.parentCourse.startDate);
-  }
-
-  getMaxEndDate(): Date {
-    return new Date(this.parentCourse.endDate);
-  }
-
-  getMinEndDate(): Date | null {
-    const startDate = this.subCourseForm.get('startDate')?.value;
-    return startDate ? new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 1)) : null;
+    return Object.keys(errors).length ? errors : null;
   }
 
   onSubmit() {
@@ -116,46 +94,37 @@ export class AddSubCourseComponent implements OnInit {
     }
 
     const formValue = this.subCourseForm.value;
+
+
+    const startDate = this.convertToLocalDate(new Date(formValue.startDate));
+    const endDate = this.convertToLocalDate(new Date(formValue.endDate));
+
+    console.log('Start Date:', startDate.toISOString().split('T')[0]);
+    console.log('End Date:', endDate.toISOString().split('T')[0]);
+
     const subCourse = {
       name: formValue.name.trim(),
-      startDate: formValue.startDate,
-      endDate: formValue.endDate
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      courseId: this.courseId
     };
 
-    try {
-      this.subCourseService.validateSubCourseDates(this.parentCourse, subCourse);
-
-      const formattedSubCourse = {
-        ...subCourse,
-        startDate: new Date(subCourse.startDate),
-        endDate: new Date(subCourse.endDate),
-        courseId: this.courseId
-      };
-
-      this.subCourseService.addSubCourse(this.courseId, subCourse).subscribe({
-        next: (createdSubCourse) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Subcourse created successfully'
-          });
-          this.ref.close(createdSubCourse);
-        },
-        error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: error.message || 'Failed to create subcourse'
-          });
-        },
-
-      });
-    } catch (error) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Validation Error',
-        detail: error instanceof Error ? error.message : 'An unknown error occurred'
-      });
-    }
+    this.subCourseService.addSubCourse(this.courseId, subCourse).subscribe({
+      next: (createdSubCourse) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Subcourse created successfully'
+        });
+        this.ref.close(createdSubCourse);
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: error.message || 'Failed to create subcourse'
+        });
+      }
+    });
   }
 }
